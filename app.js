@@ -7,18 +7,17 @@ var clickCounter = [];
 var MAX_CLICK_COUNTER = 20;
 
 function getRandomPicIndex() {
-  return Math.floor(Math.random())
-    * (picStorage.length);
+  return Math.floor(Math.random() * (picStorage.length));
 }
 
 getRandomPicIndex();
+
 
 function select3PicsAndRender() {
   randomPics = [];
 
   while (randomPics.length < 3) {
     var nextRandomValue = getRandomPicIndex();
-
     if (!randomPics.includes(nextRandomValue)) {
       randomPics.push(nextRandomValue);
     }
@@ -27,7 +26,7 @@ function select3PicsAndRender() {
   var placeholder1 = document.getElementById('placeholder-1');
   var placeholder2 = document.getElementById('placeholder-2');
 
-  select3PicsAndRender();
+
 
   picStorage[randomPics[0]].render(placeholder0);
   picStorage[randomPics[1]].render(placeholder1);
@@ -59,25 +58,25 @@ var breakfast = new Picture('breakfast', './image/breakfast.jpg');
 var bubblegum = new Picture('bubblegum', './image/bubblegum.jpg');
 var chair = new Picture('chair', './image/chair.jpg');
 var cthulhu = new Picture('cthulhu', './image/cthulhu.jpg');
-var dog-duck = new Picture('dog-duck', './image/dog-duck.jpg');
+var dogDuck = new Picture('dog-duck', './image/dog-duck.jpg');
 var dragon = new Picture('dragon', './image/dragon.jpg');
 var pen = new Picture('pen', './image/pen.jpg');
-var pet-sweep = new Picture('pet-sweep', './image/pet-sweep.jpg');
+var petSweep = new Picture('pet-sweep', './image/pet-sweep.jpg');
 var scissors = new Picture('scissors', './image/scissors.jpg');
 var shark = new Picture('shark', './image/shark.jpg');
 var sweep = new Picture('sweep', './image/sweep.png');
 var tauntaun = new Picture('tauntaun', './image/tauntaun.jpg');
 var unicorn = new Picture('unicorn', './image/unicorn.jpg');
 var usb = new Picture('usb', './image/usb.gif');
-var water-can = new Picture('water-can', './image/water-can.jpg');
-var wine-glass = new Picture('wine-glass', './image/wine-glass.jpg');
+var waterCan = new Picture('water-can', './image/water-can.jpg');
+var wineGlass = new Picture('wine-glass', './image/wine-glass.jpg');
 
 function clickManager(event) {
   clickCounter++;
   if (clickCounter < MAX_CLICK_COUNTER) {
     var pictureIndex;
 
-    if (event.target.id === 'placeholder-0)'{
+    if (event.target.id === 'placeholder-0') {
       pictureIndex = 0;
     } else if (event.target.id === 'placeholder-1') {
       pictureIndex = 1;
@@ -92,7 +91,7 @@ function clickManager(event) {
     alert('game over');
   }
 }
-clickManager(event);
+
 
 getRandomPicIndex();
 select3PicsAndRender();
