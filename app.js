@@ -45,6 +45,7 @@ var Picture = function (name, picture) {
 
   this.render = function (domReferance) {
     domReferance.src = picture;
+    this.timeShown++;
   }
 
   picStorage.push(this);
@@ -89,8 +90,26 @@ function clickManager(event) {
     select3PicsAndRender();
   } else {
     alert('game over');
+    resultsList();
   }
 }
+
+function resultsList() {
+  var results = document.getElementById('resultsOfGame');
+  for (var i = 0; i < picStorage.length; i++) {
+    var li = document.createElement('li');
+    li.textContent = `${picStorage[i].name}: was shown ${picStorage[i].timeShown} times, of those times it was selected ${picStorage[i].timesClicked} times.`
+    results.append(li);
+  }
+}
+
+
+
+
+
+
+
+
 
 
 getRandomPicIndex();
