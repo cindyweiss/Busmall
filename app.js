@@ -2,22 +2,33 @@
 
 
 var picStorage = [];
-var randomPics = [];
 var clickCounter = [];
 var MAX_CLICK_COUNTER = 20;
+var lastPicsShown = [];
+var randomPics = [];
 
 function getRandomPicIndex() {
   return Math.floor(Math.random() * (picStorage.length));
 }
-
-getRandomPicIndex();
 
 
 function select3PicsAndRender() {
   randomPics = [];
 
   while (randomPics.length < 3) {
+
     var nextRandomValue = getRandomPicIndex();
+    // var theNextPic = picStorage[nextRandomValue];
+    // console.log(nextRandomValue);
+
+    // console.log(picStorage[nextRandomValue]);
+
+    // if (theNextPic === lastPicsShown[0] || theNextPic === lastPicsShown[1] || theNextPic === lastPicsShown[2]) {
+
+    //   nextRandomValue = getRandomPicIndex();
+    // }
+    // // console.log(lastPicsShown);
+
     if (!randomPics.includes(nextRandomValue)) {
       randomPics.push(nextRandomValue);
     }
@@ -26,11 +37,15 @@ function select3PicsAndRender() {
   var placeholder1 = document.getElementById('placeholder-1');
   var placeholder2 = document.getElementById('placeholder-2');
 
-
-
   picStorage[randomPics[0]].render(placeholder0);
   picStorage[randomPics[1]].render(placeholder1);
   picStorage[randomPics[2]].render(placeholder2);
+
+  // lastPicsShown.push(picStorage[randomPics[0]]);
+  // lastPicsShown.push(picStorage[randomPics[1]]);
+  // lastPicsShown.push(picStorage[randomPics[2]]);
+
+  //return randomPics;
 }
 
 var Picture = function (name, picture) {
@@ -41,15 +56,15 @@ var Picture = function (name, picture) {
 
   this.markClick = function () {
     this.timesClicked++;
-  }
+  };
 
   this.render = function (domReferance) {
     domReferance.src = picture;
     this.timeShown++;
-  }
+  };
 
   picStorage.push(this);
-}
+};
 
 var bag = new Picture('bag', './image/bag.jpg');
 var banana = new Picture('banana', './image/banana.jpg');
@@ -85,9 +100,11 @@ function clickManager(event) {
       pictureIndex = 2;
     }
     var clickedPicture = picStorage[randomPics[pictureIndex]];
+    //console.log(clickedPicture);
     clickedPicture.markClick();
 
     select3PicsAndRender();
+
   } else {
     alert('game over');
     resultsList();
@@ -102,16 +119,6 @@ function resultsList() {
     results.append(li);
   }
 }
-
-
-
-
-
-
-
-
-
-
 getRandomPicIndex();
 select3PicsAndRender();
 
@@ -120,3 +127,4 @@ var placeholder1 = document.getElementById('placeholder-1');
 var placeholder2 = document.getElementById('placeholder-2');
 
 placeholder0.addEventListener('click', clickManager); placeholder1.addEventListener('click', clickManager); placeholder2.addEventListener('click', clickManager);
+
