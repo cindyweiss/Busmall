@@ -107,7 +107,9 @@ function clickManager(event) {
 
   } else {
     alert('game over');
+    createPictureChart();
     resultsList();
+
   }
 }
 
@@ -128,3 +130,45 @@ var placeholder2 = document.getElementById('placeholder-2');
 
 placeholder0.addEventListener('click', clickManager); placeholder1.addEventListener('click', clickManager); placeholder2.addEventListener('click', clickManager);
 
+function createPictureChart() {
+  var nameArray = [];
+  var clickArray = [];
+  var timesShownArray = [];
+
+  for (var i = 0; i < picStorage.length; i++) {
+    nameArray.push(picStorage[i].name);
+    clickArray.push(picStorage[i].timesClicked);
+    timesShownArray.push(picStorage[i].timeShown);
+  }
+
+  var context = document.getElementById('chart').getContext('2d');
+  var pictureChart = new Chart(context, {
+    type: 'bar',
+    data: {
+      labels: nameArray,
+      datasets: [
+        {
+          label: 'Picture Clicks',
+          data: clickArray,
+          backgroundColor: 'rgb(255,99,132)',
+          borderColor: 'rgb(255,99,132)',
+        },
+        {
+          label: 'timesShown',
+          data: timesShownArray,
+        }
+      ],
+    },
+    options: {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            }
+          },
+        ],
+      }
+    },
+  });
+}
