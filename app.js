@@ -1,7 +1,7 @@
 'use strict';
 
 var PICTURE_DATA = 'pictureData';
-
+var previousArray = [];
 var picStorage = [];
 var clickCounter = [];
 var MAX_CLICK_COUNTER = 20;
@@ -13,15 +13,17 @@ function getRandomPicIndex() {
 
 function select3PicsAndRender() {
   randomPics = [];
-
+  console.log(`\nprevious ${previousArray}`);
   while (randomPics.length < 3) {
 
     var nextRandomValue = getRandomPicIndex();
 
-    if (!randomPics.includes(nextRandomValue)) {
+    if ((!randomPics.includes(nextRandomValue)) && (!previousArray.includes(nextRandomValue))) {
       randomPics.push(nextRandomValue);
     }
   }
+  previousArray = randomPics;
+  console.log(`current ${randomPics}`);
 
   var placeholder0 = document.getElementById('placeholder-0');
   var placeholder1 = document.getElementById('placeholder-1');
@@ -116,8 +118,9 @@ if (localStorage.getItem(PICTURE_DATA) === null) {
 
 
 function clickManager(event) {
-  clickCounter++;
   if (clickCounter < MAX_CLICK_COUNTER) {
+
+    clickCounter++;
     var pictureIndex;
 
     if (event.target.id === 'placeholder-0') {
