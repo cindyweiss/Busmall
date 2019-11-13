@@ -2,22 +2,32 @@
 
 
 var picStorage = [];
-var randomPics = [];
 var clickCounter = [];
 var MAX_CLICK_COUNTER = 20;
+var lastPicsShown = [];
+var randomPics = [];
 
 function getRandomPicIndex() {
-  return Math.floor(Math.random())
-    * (picStorage.length);
+  return Math.floor(Math.random() * (picStorage.length));
 }
 
-getRandomPicIndex();
 
 function select3PicsAndRender() {
   randomPics = [];
 
   while (randomPics.length < 3) {
+
     var nextRandomValue = getRandomPicIndex();
+    // var theNextPic = picStorage[nextRandomValue];
+    // console.log(nextRandomValue);
+
+    // console.log(picStorage[nextRandomValue]);
+
+    // if (theNextPic === lastPicsShown[0] || theNextPic === lastPicsShown[1] || theNextPic === lastPicsShown[2]) {
+
+    //   nextRandomValue = getRandomPicIndex();
+    // }
+    // // console.log(lastPicsShown);
 
     if (!randomPics.includes(nextRandomValue)) {
       randomPics.push(nextRandomValue);
@@ -27,11 +37,15 @@ function select3PicsAndRender() {
   var placeholder1 = document.getElementById('placeholder-1');
   var placeholder2 = document.getElementById('placeholder-2');
 
-  select3PicsAndRender();
-
   picStorage[randomPics[0]].render(placeholder0);
   picStorage[randomPics[1]].render(placeholder1);
   picStorage[randomPics[2]].render(placeholder2);
+
+  // lastPicsShown.push(picStorage[randomPics[0]]);
+  // lastPicsShown.push(picStorage[randomPics[1]]);
+  // lastPicsShown.push(picStorage[randomPics[2]]);
+
+  //return randomPics;
 }
 
 var Picture = function (name, picture) {
@@ -42,14 +56,15 @@ var Picture = function (name, picture) {
 
   this.markClick = function () {
     this.timesClicked++;
-  }
+  };
 
   this.render = function (domReferance) {
     domReferance.src = picture;
-  }
+    this.timeShown++;
+  };
 
   picStorage.push(this);
-}
+};
 
 var bag = new Picture('bag', './image/bag.jpg');
 var banana = new Picture('banana', './image/banana.jpg');
@@ -59,25 +74,25 @@ var breakfast = new Picture('breakfast', './image/breakfast.jpg');
 var bubblegum = new Picture('bubblegum', './image/bubblegum.jpg');
 var chair = new Picture('chair', './image/chair.jpg');
 var cthulhu = new Picture('cthulhu', './image/cthulhu.jpg');
-var dog-duck = new Picture('dog-duck', './image/dog-duck.jpg');
+var dogDuck = new Picture('dog-duck', './image/dog-duck.jpg');
 var dragon = new Picture('dragon', './image/dragon.jpg');
 var pen = new Picture('pen', './image/pen.jpg');
-var pet-sweep = new Picture('pet-sweep', './image/pet-sweep.jpg');
+var petSweep = new Picture('pet-sweep', './image/pet-sweep.jpg');
 var scissors = new Picture('scissors', './image/scissors.jpg');
 var shark = new Picture('shark', './image/shark.jpg');
 var sweep = new Picture('sweep', './image/sweep.png');
 var tauntaun = new Picture('tauntaun', './image/tauntaun.jpg');
 var unicorn = new Picture('unicorn', './image/unicorn.jpg');
 var usb = new Picture('usb', './image/usb.gif');
-var water-can = new Picture('water-can', './image/water-can.jpg');
-var wine-glass = new Picture('wine-glass', './image/wine-glass.jpg');
+var waterCan = new Picture('water-can', './image/water-can.jpg');
+var wineGlass = new Picture('wine-glass', './image/wine-glass.jpg');
 
 function clickManager(event) {
   clickCounter++;
   if (clickCounter < MAX_CLICK_COUNTER) {
     var pictureIndex;
 
-    if (event.target.id === 'placeholder-0)'{
+    if (event.target.id === 'placeholder-0') {
       pictureIndex = 0;
     } else if (event.target.id === 'placeholder-1') {
       pictureIndex = 1;
@@ -85,15 +100,27 @@ function clickManager(event) {
       pictureIndex = 2;
     }
     var clickedPicture = picStorage[randomPics[pictureIndex]];
+    //console.log(clickedPicture);
     clickedPicture.markClick();
 
     select3PicsAndRender();
+
   } else {
     alert('game over');
+    createPictureChart();
+    resultsList();
+
   }
 }
-clickManager(event);
 
+function resultsList() {
+  var results = document.getElementById('resultsOfGame');
+  for (var i = 0; i < picStorage.length; i++) {
+    var li = document.createElement('li');
+    li.textContent = `${picStorage[i].name}: was shown ${picStorage[i].timeShown} times, of those times it was selected ${picStorage[i].timesClicked} times.`
+    results.append(li);
+  }
+}
 getRandomPicIndex();
 select3PicsAndRender();
 
@@ -102,3 +129,46 @@ var placeholder1 = document.getElementById('placeholder-1');
 var placeholder2 = document.getElementById('placeholder-2');
 
 placeholder0.addEventListener('click', clickManager); placeholder1.addEventListener('click', clickManager); placeholder2.addEventListener('click', clickManager);
+
+function createPictureChart() {
+  var nameArray = [];
+  var clickArray = [];
+  var timesShownArray = [];
+
+  for (var i = 0; i < picStorage.length; i++) {
+    nameArray.push(picStorage[i].name);
+    clickArray.push(picStorage[i].timesClicked);
+    timesShownArray.push(picStorage[i].timeShown);
+  }
+
+  var context = document.getElementById('chart').getContext('2d');
+  var pictureChart = new Chart(context, {
+    type: 'bar',
+    data: {
+      labels: nameArray,
+      datasets: [
+        {
+          label: 'Picture Clicks',
+          data: clickArray,
+          backgroundColor: 'rgb(255,99,132)',
+          borderColor: 'rgb(255,99,132)',
+        },
+        {
+          label: 'timesShown',
+          data: timesShownArray,
+        }
+      ],
+    },
+    options: {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            }
+          },
+        ],
+      }
+    },
+  });
+}
