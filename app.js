@@ -1,16 +1,15 @@
-'use strict'
+'use strict';
 
+var PICTURE_DATA = 'pictureData';
 
 var picStorage = [];
 var clickCounter = [];
 var MAX_CLICK_COUNTER = 20;
-var lastPicsShown = [];
 var randomPics = [];
 
 function getRandomPicIndex() {
   return Math.floor(Math.random() * (picStorage.length));
 }
-
 
 function select3PicsAndRender() {
   randomPics = [];
@@ -18,21 +17,12 @@ function select3PicsAndRender() {
   while (randomPics.length < 3) {
 
     var nextRandomValue = getRandomPicIndex();
-    // var theNextPic = picStorage[nextRandomValue];
-    // console.log(nextRandomValue);
-
-    // console.log(picStorage[nextRandomValue]);
-
-    // if (theNextPic === lastPicsShown[0] || theNextPic === lastPicsShown[1] || theNextPic === lastPicsShown[2]) {
-
-    //   nextRandomValue = getRandomPicIndex();
-    // }
-    // // console.log(lastPicsShown);
 
     if (!randomPics.includes(nextRandomValue)) {
       randomPics.push(nextRandomValue);
     }
   }
+
   var placeholder0 = document.getElementById('placeholder-0');
   var placeholder1 = document.getElementById('placeholder-1');
   var placeholder2 = document.getElementById('placeholder-2');
@@ -40,12 +30,6 @@ function select3PicsAndRender() {
   picStorage[randomPics[0]].render(placeholder0);
   picStorage[randomPics[1]].render(placeholder1);
   picStorage[randomPics[2]].render(placeholder2);
-
-  // lastPicsShown.push(picStorage[randomPics[0]]);
-  // lastPicsShown.push(picStorage[randomPics[1]]);
-  // lastPicsShown.push(picStorage[randomPics[2]]);
-
-  //return randomPics;
 }
 
 var Picture = function (name, picture) {
@@ -59,33 +43,77 @@ var Picture = function (name, picture) {
   };
 
   this.render = function (domReferance) {
-    domReferance.src = picture;
+    domReferance.src = this.picture;
     this.timeShown++;
   };
 
-  picStorage.push(this);
+
+
+  this.loadData = function (data) {
+    this.timesClicked = data.timesClicked;
+    this.timeShown = data.timeShown;
+    this.name = data.name;
+    this.picture = data.picture;
+  };
 };
 
-var bag = new Picture('bag', './image/bag.jpg');
-var banana = new Picture('banana', './image/banana.jpg');
-var bathroom = new Picture('bathroom', './image/bathroom.jpg');
-var boots = new Picture('bots', './image/boots.jpg');
-var breakfast = new Picture('breakfast', './image/breakfast.jpg');
-var bubblegum = new Picture('bubblegum', './image/bubblegum.jpg');
-var chair = new Picture('chair', './image/chair.jpg');
-var cthulhu = new Picture('cthulhu', './image/cthulhu.jpg');
-var dogDuck = new Picture('dog-duck', './image/dog-duck.jpg');
-var dragon = new Picture('dragon', './image/dragon.jpg');
-var pen = new Picture('pen', './image/pen.jpg');
-var petSweep = new Picture('pet-sweep', './image/pet-sweep.jpg');
-var scissors = new Picture('scissors', './image/scissors.jpg');
-var shark = new Picture('shark', './image/shark.jpg');
-var sweep = new Picture('sweep', './image/sweep.png');
-var tauntaun = new Picture('tauntaun', './image/tauntaun.jpg');
-var unicorn = new Picture('unicorn', './image/unicorn.jpg');
-var usb = new Picture('usb', './image/usb.gif');
-var waterCan = new Picture('water-can', './image/water-can.jpg');
-var wineGlass = new Picture('wine-glass', './image/wine-glass.jpg');
+if (localStorage.getItem(PICTURE_DATA) === null) {
+  var bag = new Picture('bag', './image/bag.jpg');
+  var banana = new Picture('banana', './image/banana.jpg');
+  var bathroom = new Picture('bathroom', './image/bathroom.jpg');
+  var boots = new Picture('bots', './image/boots.jpg');
+  var breakfast = new Picture('breakfast', './image/breakfast.jpg');
+  var bubblegum = new Picture('bubblegum', './image/bubblegum.jpg');
+  var chair = new Picture('chair', './image/chair.jpg');
+  var cthulhu = new Picture('cthulhu', './image/cthulhu.jpg');
+  var dogDuck = new Picture('dog-duck', './image/dog-duck.jpg');
+  var dragon = new Picture('dragon', './image/dragon.jpg');
+  var pen = new Picture('pen', './image/pen.jpg');
+  var petSweep = new Picture('pet-sweep', './image/pet-sweep.jpg');
+  var scissors = new Picture('scissors', './image/scissors.jpg');
+  var shark = new Picture('shark', './image/shark.jpg');
+  var sweep = new Picture('sweep', './image/sweep.png');
+  var tauntaun = new Picture('tauntaun', './image/tauntaun.jpg');
+  var unicorn = new Picture('unicorn', './image/unicorn.jpg');
+  var usb = new Picture('usb', './image/usb.gif');
+  var waterCan = new Picture('water-can', './image/water-can.jpg');
+  var wineGlass = new Picture('wine-glass', './image/wine-glass.jpg');
+
+  picStorage.push(bag);
+  picStorage.push(banana);
+  picStorage.push(bathroom);
+  picStorage.push(boots);
+  picStorage.push(breakfast);
+  picStorage.push(bubblegum);
+  picStorage.push(chair);
+  picStorage.push(cthulhu);
+  picStorage.push(dogDuck);
+  picStorage.push(dragon);
+  picStorage.push(pen);
+  picStorage.push(petSweep);
+  picStorage.push(scissors);
+  picStorage.push(shark);
+  picStorage.push(sweep);
+  picStorage.push(tauntaun);
+  picStorage.push(unicorn);
+  picStorage.push(usb);
+  picStorage.push(waterCan);
+  picStorage.push(wineGlass);
+
+} else {
+  var jsonData = localStorage.getItem(PICTURE_DATA);
+  var data = JSON.parse(jsonData);
+
+  for (var i = 0; i < data.length; i++) {
+    var newPic = new Picture('', '');
+
+    newPic.loadData(data[i]);
+    picStorage.push(newPic);
+  }
+}
+
+
+
 
 function clickManager(event) {
   clickCounter++;
@@ -107,9 +135,14 @@ function clickManager(event) {
 
   } else {
     alert('game over');
+    savePictureDataToLoacalStorage();
     createPictureChart();
     resultsList();
+  }
 
+  function savePictureDataToLoacalStorage() {
+    var jsonData = JSON.stringify(picStorage);
+    localStorage.setItem(PICTURE_DATA, jsonData);
   }
 }
 
@@ -117,7 +150,7 @@ function resultsList() {
   var results = document.getElementById('resultsOfGame');
   for (var i = 0; i < picStorage.length; i++) {
     var li = document.createElement('li');
-    li.textContent = `${picStorage[i].name}: was shown ${picStorage[i].timeShown} times, of those times it was selected ${picStorage[i].timesClicked} times.`
+    li.textContent = `${picStorage[i].name}: was shown ${picStorage[i].timeShown} times, of those times it was selected ${picStorage[i].timesClicked} times.`;
     results.append(li);
   }
 }
@@ -128,7 +161,9 @@ var placeholder0 = document.getElementById('placeholder-0');
 var placeholder1 = document.getElementById('placeholder-1');
 var placeholder2 = document.getElementById('placeholder-2');
 
-placeholder0.addEventListener('click', clickManager); placeholder1.addEventListener('click', clickManager); placeholder2.addEventListener('click', clickManager);
+placeholder0.addEventListener('click', clickManager);
+placeholder1.addEventListener('click', clickManager);
+placeholder2.addEventListener('click', clickManager);
 
 function createPictureChart() {
   var nameArray = [];
@@ -172,3 +207,4 @@ function createPictureChart() {
     },
   });
 }
+
