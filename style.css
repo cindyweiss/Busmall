@@ -1,3 +1,32 @@
 body {
   background-color: aquamarine; 
+  text-align: center;
+
+}
+
+
+
+
+h1 {
+  color: darkblue;
+  text-shadow: 1px 1px 0px #000000;
+  text-transform: uppercase;
+}
+
+h2 {
+  border-width: 10px;
+  border-style: outset;
+  border-color: darkslategray;
+  background-color: floralwhite;
+  margin: 10px;
+  padding: 10px;
+}
+
+#resultsOfGame {
+  border-width: 10px;
+  border-style: outset;
+  border-color: darkslategray;
+  background-color: floralwhite;
+  margin: 10px;
+  padding: 10px;
 }
