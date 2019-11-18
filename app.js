@@ -14,6 +14,9 @@ function getRandomPicIndex() {
 function select3PicsAndRender() {
   randomPics = [];
   console.log(`\nprevious ${previousArray}`);
+
+  // setting three random pictures here
+
   while (randomPics.length < 3) {
 
     var nextRandomValue = getRandomPicIndex();
@@ -58,7 +61,7 @@ var Picture = function (name, picture) {
     this.picture = data.picture;
   };
 };
-
+//  all of my pictures held here 
 if (localStorage.getItem(PICTURE_DATA) === null) {
   var bag = new Picture('bag', './image/bag.jpg');
   var banana = new Picture('banana', './image/banana.jpg');
@@ -81,6 +84,7 @@ if (localStorage.getItem(PICTURE_DATA) === null) {
   var waterCan = new Picture('water-can', './image/water-can.jpg');
   var wineGlass = new Picture('wine-glass', './image/wine-glass.jpg');
 
+  /// pictures being pushed here 
   picStorage.push(bag);
   picStorage.push(banana);
   picStorage.push(bathroom);
@@ -178,7 +182,7 @@ function createPictureChart() {
     clickArray.push(picStorage[i].timesClicked);
     timesShownArray.push(picStorage[i].timeShown);
   }
-
+  // creating a chart here from chart.js
   var context = document.getElementById('chart').getContext('2d');
   var pictureChart = new Chart(context, {
     type: 'bar',
